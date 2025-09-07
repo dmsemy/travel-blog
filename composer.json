@@ -15,6 +15,7 @@
         "symfony/yaml": "7.3.*"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.87"
     },
     "config": {
         "allow-plugins": {
@@ -55,7 +56,9 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "lint:cs": "php-cs-fixer fix --using-cache=no --dry-run --diff",
+        "lint:cs:fix": "php-cs-fixer fix --using-cache=no"
     },
     "conflict": {
         "symfony/symfony": "*"
