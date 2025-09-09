@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ruleset name="Symfony7 Coding Standard">
+    <description>PHP_CodeSniffer rules for Symfony 7 project</description>
+    
+    <rule ref="Symfony">
+        <exclude name="Symfony.Commenting.License"/>
+    </rule>
+
+    <file>src</file>
+
+    <exclude-pattern>var/*</exclude-pattern>
+    <exclude-pattern>vendor/*</exclude-pattern>
+    <exclude-pattern>public/*</exclude-pattern>
+    
+    <arg name="colors"/>
+    <arg name="extensions" value="php"/>
+    <arg name="severity" value="3"/>
+</ruleset>
