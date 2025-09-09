@@ -67,7 +67,9 @@
         "lint:phpcs:fix": "phpcbf",
         "lint": ["@lint:cs", "@lint:phpcs"],
         "lint:fix": ["@lint:cs:fix", "@lint:phpcs:fix"],
-        "grumphp": "vendor/bin/grumphp run --no-interaction"
+        "grumphp": "vendor/bin/grumphp run --no-interaction",
+        "grumphp:commit-msg": "echo 'NOTE: This uses .git/COMMIT_EDITMSG. If not committing right now, it may show the previous message.' && vendor/bin/grumphp git:commit-msg .git/COMMIT_EDITMSG",
+        "grumphp:pre-commit": "vendor/bin/grumphp run --testsuite=pre-commit --no-interaction"
     },
     "conflict": {
         "symfony/symfony": "*"

@@ -1,7 +1,26 @@
 grumphp:
   stop_on_failure: false
   parallel: true
+
+  testsuites:
+    commit_message:
+      tasks:
+        - git_commit_message
+    pre_commit:
+      tasks:
+        - phpcsfixer
+        - phpcs
+        - shell
+
   tasks:
+    git_commit_message:
+      allow_empty_message: false
+      enforce_capitalized_subject: false
+      max_subject_width: 72
+      matchers:
+        Conventional: '/^(feat|fix|chore|docs|refactor|test|style|perf)(\([\w\-]+\))?!?:\s[A-Z].+$/'
+      case_insensitive: false
+
     phpcsfixer:
       config: .php-cs-fixer.dist.php
       diff: true
@@ -12,3 +31,8 @@ grumphp:
     phpcs:
       standard: phpcs.xml.dist
       triggered_by: [php]
+
+    shell:
+      scripts: 
+        - bin/validate-symfony-config.sh
+      triggered_by: ['php', 'xml', 'yaml', 'yml']
