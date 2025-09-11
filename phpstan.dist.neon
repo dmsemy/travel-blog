@@ -1,0 +1,14 @@
+parameters:
+    level: max
+    paths:
+        - src/
+
+    reportUnmatchedIgnoredErrors: true
+    checkMissingVarTagTypehint: true
+
+    excludePaths:
+        - %currentWorkingDirectory%/var/*
+        - %currentWorkingDirectory%/vendor/*
+
+    symfony:
+        containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
