@@ -17,6 +17,7 @@
     "require-dev": {
         "escapestudios/symfony2-coding-standard": "^3.16",
         "friendsofphp/php-cs-fixer": "^3.87",
+        "phpmd/phpmd": "^2.15",
         "phpro/grumphp": "^2.15",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.1",
@@ -71,7 +72,8 @@
         "grumphp": "vendor/bin/grumphp run --no-interaction",
         "grumphp:commit-msg": "echo 'NOTE: This uses .git/COMMIT_EDITMSG. If not committing right now, it may show the previous message.' && vendor/bin/grumphp git:commit-msg .git/COMMIT_EDITMSG",
         "grumphp:pre-commit": "vendor/bin/grumphp run --testsuite=pre-commit --no-interaction",
-        "phpstan": "vendor/bin/phpstan analyse --memory-limit=1G --no-progress"
+        "phpstan": "vendor/bin/phpstan analyse --memory-limit=1G --no-progress",
+        "phpmd": "vendor/bin/phpmd src/ text phpmd.xml.dist"
     },
     "conflict": {
         "symfony/symfony": "*"
