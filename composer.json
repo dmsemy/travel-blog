@@ -7,6 +7,10 @@
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "doctrine/dbal": "^3",
+        "doctrine/doctrine-bundle": "^2.16",
+        "doctrine/doctrine-migrations-bundle": "^3.4",
+        "doctrine/orm": "^3.5",
         "symfony/console": "7.3.*",
         "symfony/dotenv": "7.3.*",
         "symfony/flex": "^2",
@@ -63,6 +67,7 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
+        "sync-env": "./bin/sync-envs.sh",
         "lint:cs": "php-cs-fixer fix --using-cache=no --dry-run --diff",
         "lint:cs:fix": "php-cs-fixer fix --using-cache=no",
         "lint:phpcs": "phpcs",
