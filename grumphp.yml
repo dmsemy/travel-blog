@@ -1,8 +1,21 @@
-grumphp:
+parameters:
   stop_on_failure: false
-  parallel: true
+  parallel: 
+    enabled: true
+
+  git_hooks:
+    pre-commit: pre_commit
+    commit-msg: commit_message
+    pre-push: pre_push
 
   testsuites:
+    default:
+      tasks:
+        - phpcsfixer
+        - phpcs
+        - shell
+        - phpstan
+        - phpmd
     commit_message:
       tasks:
         - git_commit_message
@@ -10,6 +23,11 @@ grumphp:
       tasks:
         - phpcsfixer
         - phpcs
+        - shell
+    pre_push:
+      tasks:
+        - phpstan
+        - phpmd
         - shell
 
   tasks:
@@ -36,3 +54,13 @@ grumphp:
       scripts: 
         - bin/validate-symfony-config.sh
       triggered_by: ['php', 'xml', 'yaml', 'yml']
+
+    phpstan:
+      configuration: phpstan.dist.neon
+      level: max
+      memory_limit: 512M
+      triggered_by: [php]
+
+    phpmd:
+      ruleset: [phpmd.xml.dist]
+      triggered_by: [php]

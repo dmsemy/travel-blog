@@ -80,6 +80,7 @@
         "grumphp": "vendor/bin/grumphp run --no-interaction",
         "grumphp:commit-msg": "echo 'NOTE: This uses .git/COMMIT_EDITMSG. If not committing right now, it may show the previous message.' && vendor/bin/grumphp git:commit-msg .git/COMMIT_EDITMSG",
         "grumphp:pre-commit": "vendor/bin/grumphp run --testsuite=pre-commit --no-interaction",
+        "grumphp:pre-push": "vendor/bin/grumphp run --testsuite=pre_push --no-interaction",
         "phpstan": "vendor/bin/phpstan analyse --memory-limit=1G --no-progress",
         "phpmd": "vendor/bin/phpmd src/ text phpmd.xml.dist"
     },
