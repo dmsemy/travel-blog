@@ -5,6 +5,7 @@ parameters:
 
     reportUnmatchedIgnoredErrors: true
     checkMissingVarTagTypehint: true
+    treatPhpDocTypesAsCertain: true
 
     excludePaths:
         - %currentWorkingDirectory%/var/*
@@ -12,3 +13,5 @@ parameters:
 
     symfony:
         containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
+    doctrine:
+        allowNullablePropertyForRequiredField: true

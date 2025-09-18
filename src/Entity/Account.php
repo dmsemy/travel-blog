@@ -39,12 +39,13 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
      *
-     * @return array<string, mixed>
+     * @return array<string, mixed> The serialized data
      */
     public function __serialize(): array
     {
+        /** @var array<string, mixed> $data */
         $data = (array) $this;
-        $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
+        $data["\0".self::class."\0password"] = hash('crc32c', $this->password ?? '');
 
         return $data;
     }
@@ -98,7 +99,7 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
-        return array_unique($roles);
+        return array_values(array_unique($roles));
     }
 
     /**
