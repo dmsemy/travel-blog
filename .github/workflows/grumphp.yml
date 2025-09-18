@@ -1,0 +1,51 @@
+name: GrumPHP CI
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  grumphp:
+    name: Run GrumPHP checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2' # Adjust as needed
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: Run phpcsfixer
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff --config=.php-cs-fixer.dist.php
+
+      - name: Run phpcs
+        run: vendor/bin/phpcs --standard=phpcs.xml.dist
+
+      - name: Run phpstan
+        run: vendor/bin/phpstan analyse --configuration=phpstan.dist.neon --level=max --memory-limit=512M
+
+      - name: Run phpmd
+        run: vendor/bin/phpmd . text phpmd.xml.dist
+
+      - name: Validate Symfony config (shell script)
+        run: bin/validate-symfony-config.sh
+
+      # Optional: Commit message check
+      - name: Check last commit message (Conventional Commits)
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          if ! echo "$COMMIT_MSG" | grep -P '^(feat|fix|chore|docs|refactor|test|style|perf)(\([\w\-]+\))?!?:\s[A-Z].+$'; then
+            echo "❌ Commit message does not follow Conventional Commits."
+            exit 1
+          fi
