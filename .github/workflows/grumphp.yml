@@ -1,0 +1,62 @@
+name: GrumPHP CI
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  grumphp:
+    name: Run GrumPHP checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Install dependencies (including Symfony CS)
+        run: |
+          composer install --prefer-dist --no-progress --no-suggest
+          vendor/bin/phpcs --config-set installed_paths vendor/escapestudios/symfony2-coding-standard
+
+      - name: Run phpcsfixer
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff --config=.php-cs-fixer.dist.php
+
+      - name: Run phpcs
+        run: vendor/bin/phpcs --standard=phpcs.xml.dist
+
+      - name: Run phpstan
+        run: vendor/bin/phpstan analyse --configuration=phpstan.dist.neon --level=max --memory-limit=512M
+
+      - name: Run phpmd
+        run: vendor/bin/phpmd . text phpmd.xml.dist
+
+      - name: Validate Symfony config (shell script)
+        run: bin/validate-symfony-config.sh
+
+      - name: Check last commit message (Conventional Commits)
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B | grep -v '^#')
+          COMMIT_SUBJECT=$(echo "$COMMIT_MSG" | head -n1)
+
+          echo "🔍 Checking commit message subject: '$COMMIT_SUBJECT'"
+
+          # Skip validation if it's a merge commit
+          if echo "$COMMIT_SUBJECT" | grep -q '^Merge '; then
+            echo "ℹ️ Merge commit detected — skipping Conventional Commit check."
+            exit 0
+          fi
+
+          if ! echo "$COMMIT_SUBJECT" | grep -P '^(feat|fix|chore|docs|refactor|test|style|perf)(\([\w\-]+\))?!?:\s[A-Z].+$'; then
+            echo "❌ Commit message subject does not follow Conventional Commits."
+            exit 1
+          fi
