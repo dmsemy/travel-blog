@@ -44,10 +44,14 @@ jobs:
         run: bin/validate-symfony-config.sh
 
       # Optional: Commit message check
-      - name: Check last commit message (Conventional Commits)
+     - name: Check last commit message (Conventional Commits)
         run: |
-          COMMIT_MSG=$(git log -1 --pretty=%B)
-          if ! echo "$COMMIT_MSG" | grep -P '/^(feat|fix|chore|docs|refactor|test|style|perf)(\([\w\-]+\))?!?:\s[A-Z].+$/'; then
-            echo "❌ Commit message does not follow Conventional Commits."
-            exit 1
+          COMMIT_MSG=$(git log -1 --pretty=%B | grep -v '^#')
+          COMMIT_SUBJECT=$(echo "$COMMIT_MSG" | head -n1)
+
+          echo "🔍 Checking commit message subject: '$COMMIT_SUBJECT'"
+
+          if ! echo "$COMMIT_SUBJECT" | grep -P '^(feat|fix|chore|docs|refactor|test|style|perf)(\([\w\-]+\))?!?:\s[A-Z].+$'; then
+            echo "❌ Commit message subject does not follow Conventional Commits."
+          exit 1
           fi
