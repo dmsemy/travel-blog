@@ -20,11 +20,13 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2' # Adjust as needed
+          php-version: '8.3'
           coverage: none
 
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
+      - name: Install dependencies (including Symfony CS)
+        run: |
+          composer install --prefer-dist --no-progress --no-suggest
+          vendor/bin/phpcs --config-set installed_paths vendor/escapestudios/symfony2-coding-standard
 
       - name: Run phpcsfixer
         run: vendor/bin/php-cs-fixer fix --dry-run --diff --config=.php-cs-fixer.dist.php
@@ -45,7 +47,7 @@ jobs:
       - name: Check last commit message (Conventional Commits)
         run: |
           COMMIT_MSG=$(git log -1 --pretty=%B)
-          if ! echo "$COMMIT_MSG" | grep -P '^(feat|fix|chore|docs|refactor|test|style|perf)(\([\w\-]+\))?!?:\s[A-Z].+$'; then
+          if ! echo "$COMMIT_MSG" | grep -P '/^(feat|fix|chore|docs|refactor|test|style|perf)(\([\w\-]+\))?!?:\s[A-Z].+$/'; then
             echo "❌ Commit message does not follow Conventional Commits."
             exit 1
           fi
